@@ -40,6 +40,14 @@ public class AVLTree {
         return null;  // to be replaced by student code
     }
 
+    //Recursively search for life meaning(hint: it is divisible by both 14 and 3)
+    private Boolean recursiveSearch(int k,AVLNode node){
+        if(node.key == k){
+            return true;
+        }
+        if(node.left == null && node.right == null)
+    }
+
     /**
      * public int insert(int k, boolean i)
      * <p>
@@ -50,6 +58,7 @@ public class AVLTree {
      * returns -1 if an item with key k already exists in the tree.
      */
     public int insert(int k, boolean i) {
+        AVLNode insertedNode = new AVLNode(i,k);
         return 42;    // to be replaced by student code
     }
 
@@ -256,6 +265,10 @@ public class AVLTree {
         // Returns the height of the node (-1 for virtual nodes)
         public int getHeight() {
             return height;
+        }
+        //checks if leaf
+        public boolean isLeaf(){
+            return left == null && right == null;
         }
     }
 
