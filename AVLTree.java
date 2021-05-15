@@ -11,12 +11,14 @@
  */
 
 public class AVLTree {
-
+    private AVLNode root;
+    private int height;
+    private int treeSize;
     /**
      * This constructor creates an empty AVLTree.
      */
     public AVLTree(){
-        return; //to be replaced by student code
+        return root;
     }
 
     /**
@@ -25,7 +27,7 @@ public class AVLTree {
      * returns true if and only if the tree is empty
      */
     public boolean empty() {
-        return false; // to be replaced by student code
+        return this.getRoot() == null;
     }
 
     /**
@@ -90,8 +92,18 @@ public class AVLTree {
      * or an empty array if the tree is empty.
      */
     public int[] keysToArray() {
-        int[] arr = new int[42]; // to be replaced by student code
-        return arr;              // to be replaced by student code
+        int[] arr = new int[treeSize];
+        traverseInOrder(arr,0);
+        return arr;
+    }
+
+    //Traverses tree according to the regular order between Natural numbers.
+    private void traverseInOrder(int[] arr,int index){
+        if(!this.empty()){
+            this.left.traverseInOrder(arr,index);
+            arr[index++] = this.root.getKey();
+            this.right.traverseInOrder(arr,index);  
+        }
     }
 
     /**
@@ -112,7 +124,7 @@ public class AVLTree {
      * Returns the number of nodes in the tree.
      */
     public int size() {
-        return 42; // to be replaced by student code
+        return treeSize;
     }
 
     /**
@@ -121,7 +133,7 @@ public class AVLTree {
      * Returns the root AVL node, or null if the tree is empty
      */
     public AVLNode getRoot() {
-        return null;
+        return root;
     }
 
     /**
