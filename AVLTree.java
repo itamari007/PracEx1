@@ -243,7 +243,7 @@ public class AVLTree {
 
         // Returns the height of the node (-1 for virtual nodes)
         public int getHeight() {
-            return 42; // to be replaced by student code
+            return height;
         }
     }
 
