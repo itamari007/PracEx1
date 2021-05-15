@@ -12,13 +12,12 @@
 
 public class AVLTree {
     private AVLNode root;
-    private int height;
+    private int height;//Will be increased when inserting new node, and decreased when successfully deleting nodes
     private int treeSize;
     /**
      * This constructor creates an empty AVLTree.
      */
     public AVLTree(){
-        return root;
     }
 
     /**
@@ -37,15 +36,21 @@ public class AVLTree {
      * otherwise, returns null
      */
     public Boolean search(int k) {
-        return null;  // to be replaced by student code
+        return recursiveSearch(k,root);
     }
 
     //Recursively search for life meaning(hint: it is divisible by both 14 and 3)
     private Boolean recursiveSearch(int k,AVLNode node){
         if(node.key == k){
-            return true;
+            return Boolean.TRUE;
         }
-        if(node.left == null && node.right == null)
+        if(node.isLeaf()){
+            return Boolean.FALSE;
+        }
+        if(k>node.key){
+            return recursiveSearch(k,node.right);
+        }
+        return recursiveSearch(k,node.left);
     }
 
     /**
@@ -81,7 +86,7 @@ public class AVLTree {
      * or null if the tree is empty
      */
     public Boolean min() {
-        return null; // to be replaced by student code
+        return infoToArray()[0];
     }
 
     /**
@@ -91,7 +96,7 @@ public class AVLTree {
      * or null if the tree is empty
      */
     public Boolean max() {
-        return null; // to be replaced by student code
+        return infoToArray()[size()-1];
     }
 
     /**
@@ -102,16 +107,16 @@ public class AVLTree {
      */
     public int[] keysToArray() {
         int[] arr = new int[treeSize];
-        traverseInOrder(arr,0);
+        traverseInOrder(arr,0,root);
         return arr;
     }
 
     //Traverses tree according to the regular order between Natural numbers.
-    private void traverseInOrder(int[] arr,int index){
+    private void traverseInOrder(int[] arr,int index, AVLNode node){
         if(!this.empty()){
-            this.left.traverseInOrder(arr,index);
+            traverseInOrder(arr,index,node.left);
             arr[index++] = this.root.getKey();
-            this.right.traverseInOrder(arr,index);  
+            traverseInOrder(arr,index,node.right);
         }
     }
 
@@ -123,8 +128,17 @@ public class AVLTree {
      * or an empty array if the tree is empty.
      */
     public boolean[] infoToArray() {
-        boolean[] arr = new boolean[42]; // to be replaced by student code
-        return arr;                    // to be replaced by student code
+        boolean[] arr = new boolean[treeSize];
+        traverseInOrderAndPopulateInfo(arr,0,root);
+        return arr;
+    }
+
+    private void traverseInOrderAndPopulateInfo(boolean[] arr,int index, AVLNode node){
+        if(!this.empty()){
+            traverseInOrderAndPopulateInfo(arr,index,node.left);
+            arr[index++] = this.root.getValue();
+            traverseInOrderAndPopulateInfo(arr,index,node.right);
+        }
     }
 
     /**
