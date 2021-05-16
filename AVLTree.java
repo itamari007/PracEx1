@@ -12,7 +12,6 @@
 
 public class AVLTree {
     private AVLNode root;
-    private int height;//Will be increased when inserting new node, and decreased when successfully deleting nodes
     private int treeSize;
     /**
      * This constructor creates an empty AVLTree.
@@ -68,9 +67,28 @@ public class AVLTree {
         }
         AVLNode insertedNode = new AVLNode(i,k);
         int counter = 0;
+        //TODO: find where to insert the new node, i.e, who is it's parent
+        AVLNode fakeParent = new AVLNode(true,42);//TODO: calculate actual daddy.
+        fakeParent.setRight(insertedNode);
+        insertedNode.setParent(fakeParent);
+        int prevHeight = fakeParent.getHeight();
+        while (fakeParent!=null){
+            //For example: if key is bigger than daddy's
+            int parentBF = fakeParent.getBalanceFactor();
+            int absBF = Math.abs(parentBF);
+            if(prevHeight == fakeParent.getHeight() && absBF < 2){
+                return counter;
+            }
+            if(absBF < 2 && prevHeight != fakeParent.getHeight()){
+                prevHeight = fakeParent.getHeight();
+                fakeParent = fakeParent.getParent();
+            }
+        }
 
-        return counter;    // to be replaced by student code
+        return counter;
     }
+
+
 
     private AVLNode findProperNode(AVLNode node, int key){
         if (node.isLeaf()){
@@ -330,11 +348,28 @@ public class AVLTree {
 
         // Returns the height of the node (-1 for virtual nodes)
         public int getHeight() {
+            if(!this.isRealNode()){
+                this.setHeight(-1);
+                return  -1;
+            }
+            if(this.isLeaf()){
+                this.setHeight(0);
+                return 0;
+            }
+            this.setHeight(1 + Math.max(left.getHeight(), right.getHeight()));
             return height;
         }
         //checks if leaf
         public boolean isLeaf(){
             return left == null && right == null;
+        }
+
+        /**
+         *
+         * @returns this node's balance factor
+         */
+        public int getBalanceFactor(){
+            return left.getHeight()- right.getHeight();
         }
     }
 
