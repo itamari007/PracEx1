@@ -67,6 +67,41 @@ public class AVLTree {
         return 42;    // to be replaced by student code
     }
 
+    /** as name implies, rorates to the left
+     * P
+     *  \
+     *   6
+     *    \
+     *     7
+     *      \
+     *       8
+     * the argument, called naughtyNode, in this scheme is 6.
+     * Algorithm: 1.keep ref to P. set P right son from 6 to 7.
+     *            2.for 6, change parent from P to 7.
+     *            3.for 7, change his parent from 6 to P, and add 6 as his left son
+     */
+    private void rotateLeft(AVLNode naughtyNode){
+        AVLNode P = naughtyNode.getParent();//1
+        AVLNode seven = naughtyNode.getRight();//1
+        P.setRight(seven);//1
+        seven.setParent(P);//3
+        naughtyNode.setParent(seven);//2
+        seven.setLeft(naughtyNode);//3
+    }
+
+    /** as name implies, rorates to the right
+     */
+    private void rotateRight(AVLNode naughtyNode){
+        AVLNode P = naughtyNode.getParent();
+        AVLNode seven = naughtyNode.getLeft();
+        P.setLeft(seven);
+        seven.setParent(P);
+        naughtyNode.setParent(seven);
+        seven.setRight(naughtyNode);
+
+    }
+
+
     /**
      * public int delete(int k)
      * <p>
@@ -211,16 +246,19 @@ public class AVLTree {
      */
     public class AVLNode {
 
-        private int key;
-        private boolean value;
+        private Integer key;
+        private Boolean value;
         private AVLNode left = null;
         private AVLNode right = null;
         private AVLNode parent = null;
         private int height;
 
-        public AVLNode(boolean value, int key) {
+        public AVLNode(Boolean value, Integer key) {
             this.value = value;
             this.key = key;
+            if(key!=null && value!=null){
+                setLeft(new AVLNode(null,null));
+            }
         }
 
 
