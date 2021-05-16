@@ -63,8 +63,22 @@ public class AVLTree {
      * returns -1 if an item with key k already exists in the tree.
      */
     public int insert(int k, boolean i) {
+        if (search(k)){
+            return -1;
+        }
         AVLNode insertedNode = new AVLNode(i,k);
-        return 42;    // to be replaced by student code
+        int counter = 0;
+
+        return counter;    // to be replaced by student code
+    }
+
+    private AVLNode findProperNode(AVLNode node, int key){
+        if (node.isLeaf()){
+            if (node.key < key){
+                //return node.setRight();
+            }
+        }
+        return node;
     }
 
     /** as name implies, rorates to the left
@@ -246,18 +260,18 @@ public class AVLTree {
      */
     public class AVLNode {
 
-        private Integer key;
+        private int key;
         private Boolean value;
         private AVLNode left = null;
         private AVLNode right = null;
         private AVLNode parent = null;
         private int height;
 
-        public AVLNode(Boolean value, Integer key) {
+        public AVLNode(Boolean value, int key) {
             this.value = value;
             this.key = key;
-            if(key!=null && value!=null){
-                setLeft(new AVLNode(null,null));
+            if(key!=-1 && value!=null){
+                setLeft(new AVLNode(null,-1));
             }
         }
 
