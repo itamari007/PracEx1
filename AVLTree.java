@@ -40,6 +40,9 @@ public class AVLTree {
 
     //Recursively search for life meaning(hint: it is divisible by both 14 and 3)
     private Boolean recursiveSearch(int k,AVLNode node){
+        if(node==null){
+            return  Boolean.FALSE;
+        }
         if(node.key == k){
             return Boolean.TRUE;
         }
@@ -66,7 +69,10 @@ public class AVLTree {
             return -1;
         }
         AVLNode insertedNode = new AVLNode(i,k);
-        //TODO: find where to insert the new node, i.e, who is it's parent
+        if(root == null){
+            this.root = insertedNode;
+            return 0;
+        }
         insertedNode = BSTInsert(insertedNode);
         AVLNode fakeParent = insertedNode.getParent();
         fakeParent.setRight(insertedNode);
