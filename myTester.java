@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class myTester {
     private  static AVLTree testingTree = new AVLTree();
     public static void main(String[] args){
@@ -9,5 +11,7 @@ public class myTester {
             testingTree.insert(i,Boolean.TRUE);
         }
         System.out.println("SexySuccess");
+        System.out.println("TreeSize: "+testingTree.getTreeSize());
+        System.out.println(Arrays.toString(testingTree.keysToArray()));
     }
 }

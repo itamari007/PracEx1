@@ -68,6 +68,7 @@ public class AVLTree {
         if (search(k)){
             return -1;
         }
+        treeSize++;
         AVLNode insertedNode = new AVLNode(i,k);
         if(root == null){
             this.root = insertedNode;
@@ -209,9 +210,11 @@ public class AVLTree {
 
     //Traverses tree according to the regular order between Natural numbers.
     private void traverseInOrder(int[] arr,int index, AVLNode node){
-        if(!this.empty()){
+        if(node!=null&&index<arr.length){
             traverseInOrder(arr,index,node.left);
-            arr[index++] = this.root.getKey();
+            if(node.isRealNode()){
+                arr[index++] = node.getKey();
+            }
             traverseInOrder(arr,index,node.right);
         }
     }
@@ -235,6 +238,10 @@ public class AVLTree {
             arr[index++] = this.root.getValue();
             traverseInOrderAndPopulateInfo(arr,index,node.right);
         }
+    }
+
+    public int getTreeSize(){
+        return treeSize;
     }
 
     /**
@@ -381,6 +388,7 @@ public class AVLTree {
         public void setHeight(int height) {
             this.height = height;
         }
+
 
         // Returns the height of the node (-1 for virtual nodes)
         public int getHeight() {
