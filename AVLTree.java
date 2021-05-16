@@ -314,7 +314,12 @@ public class AVLTree {
             this.value = value;
             this.key = key;
             if(key!=-1 && value!=null){
-                setLeft(new AVLNode(null,-1));
+                AVLNode fictionalLeftChild = new AVLNode(null,-1);
+                fictionalLeftChild.setParent(this);
+                AVLNode fictionalRightChild = new AVLNode(null,-1);
+                fictionalRightChild.setParent(this);
+                setLeft(fictionalLeftChild);
+                setRight(fictionalRightChild);
             }
         }
 
