@@ -116,12 +116,16 @@ public class AVLTree {
      */
     private AVLNode BSTInsert(AVLNode node){
         AVLNode cursorNode = root;
-        while(cursorNode.isRealNode()){
+        while(!cursorNode.isLeaf()){
              cursorNode = cursorNode.getKey()>node.getKey()? cursorNode.getLeft() : cursorNode.getRight();
         }
-        cursorNode.key = node.getKey();
-        cursorNode.value = node.getValue();
-        return cursorNode;
+        if(cursorNode.getKey()<node.key){
+            cursorNode.setRight(node);
+        }
+        else{
+            cursorNode.setLeft(node);
+        }
+        return node;
     }
 
     /** as name implies, rorates to the left
@@ -339,6 +343,7 @@ public class AVLTree {
         //sets left child
         public void setLeft(AVLNode node) {// TODO check if beed to increase height
             left = node;
+            node.setParent(this);
         }
 
         //returns left child (if there is no left child return null)
@@ -349,6 +354,7 @@ public class AVLTree {
         //sets right child
         public void setRight(AVLNode node) { // TODO check if beed to increase height
             right = node;
+            node.setParent(this);
         }
 
         //returns right child (if there is no right child return null)
@@ -373,7 +379,7 @@ public class AVLTree {
 
         // sets the height of the node
         public void setHeight(int height) {
-            height = height;
+            this.height = height;
         }
 
         // Returns the height of the node (-1 for virtual nodes)
@@ -399,7 +405,21 @@ public class AVLTree {
          * @returns this node's balance factor
          */
         public int getBalanceFactor(){
-            return left.getHeight()- right.getHeight();
+            int leftHeight;
+            int rightHeight;
+            if(left== null){
+                leftHeight = -1;
+            }
+            else{
+                leftHeight = left.getHeight();
+            }
+            if(right == null){
+                rightHeight = -1;
+            }
+            else{
+                rightHeight = right.getHeight();
+            }
+            return leftHeight - rightHeight;
         }
     }
 
