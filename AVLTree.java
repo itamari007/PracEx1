@@ -66,7 +66,6 @@ public class AVLTree {
             return -1;
         }
         AVLNode insertedNode = new AVLNode(i,k);
-        int counter = 0;
         //TODO: find where to insert the new node, i.e, who is it's parent
         AVLNode fakeParent = new AVLNode(true,42);//TODO: calculate actual daddy.
         fakeParent.setRight(insertedNode);
@@ -77,15 +76,29 @@ public class AVLTree {
             int parentBF = fakeParent.getBalanceFactor();
             int absBF = Math.abs(parentBF);
             if(prevHeight == fakeParent.getHeight() && absBF < 2){
-                return counter;
+                return 0;
             }
             if(absBF < 2 && prevHeight != fakeParent.getHeight()){
                 prevHeight = fakeParent.getHeight();
                 fakeParent = fakeParent.getParent();
             }
+            //Hard part
+            if(parentBF == -2){//Need to rotate left at lest one time.
+                if(fakeParent.getRight()!=null &&fakeParent.getRight().getLeft()!=null){
+                    rotateRight(fakeParent.getRight());
+                }
+                rotateLeft(fakeParent);
+                return 1;
+            }
+            if(parentBF == 2){//Need to rotate right at least one time
+                if(fakeParent.getLeft()!=null &&fakeParent.getLeft().getRight()!=null){
+                    rotateLeft(fakeParent.getLeft());
+                }
+                rotateRight(fakeParent);
+                return 1;
+            }
         }
-
-        return counter;
+        return 0;
     }
 
 
