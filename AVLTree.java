@@ -67,7 +67,8 @@ public class AVLTree {
         }
         AVLNode insertedNode = new AVLNode(i,k);
         //TODO: find where to insert the new node, i.e, who is it's parent
-        AVLNode fakeParent = new AVLNode(true,42);//TODO: calculate actual daddy.
+        insertedNode = BSTInsert(insertedNode);
+        AVLNode fakeParent = insertedNode.getParent();
         fakeParent.setRight(insertedNode);
         insertedNode.setParent(fakeParent);
         int prevHeight = fakeParent.getHeight();
@@ -102,14 +103,19 @@ public class AVLTree {
     }
 
 
-
-    private AVLNode findProperNode(AVLNode node, int key){
-        if (node.isLeaf()){
-            if (node.key < key){
-                //return node.setRight();
-            }
+    /**
+     * regular Binary Search Tree Insert function,
+     * returns insertedNode
+     * @param node
+     */
+    private AVLNode BSTInsert(AVLNode node){
+        AVLNode cursorNode = root;
+        while(cursorNode.isRealNode()){
+             cursorNode = cursorNode.getKey()>node.getKey()? cursorNode.getLeft() : cursorNode.getRight();
         }
-        return node;
+        cursorNode.key = node.getKey();
+        cursorNode.value = node.getValue();
+        return cursorNode;
     }
 
     /** as name implies, rorates to the left
