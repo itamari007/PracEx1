@@ -233,15 +233,13 @@ public class AVLTree {
     }
 
     private void traverseInOrderAndPopulateInfo(boolean[] arr,int index, AVLNode node){
-        if(!this.empty()){
+        if(node!=null&&index<arr.length){
             traverseInOrderAndPopulateInfo(arr,index,node.left);
-            arr[index++] = this.root.getValue();
+            if(node.isRealNode()){
+                arr[index++] = node.getValue();
+            }
             traverseInOrderAndPopulateInfo(arr,index,node.right);
         }
-    }
-
-    public int getTreeSize(){
-        return treeSize;
     }
 
     /**

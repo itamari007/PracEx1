@@ -6,12 +6,13 @@ public class myTester {
         createAVlTestTree();
     }
     private static void createAVlTestTree(){
-        int n = 10;
+        int n = 101;
         for(int i = 1; i< n; i++){
-            testingTree.insert(i,Boolean.TRUE);
+            testingTree.insert(i,(i%4==0 || i%7 ==0 ));
         }
         System.out.println("SexySuccess");
-        System.out.println("TreeSize: "+testingTree.getTreeSize());
+        System.out.println("TreeSize: "+testingTree.size());
         System.out.println(Arrays.toString(testingTree.keysToArray()));
+        System.out.println(Arrays.toString(testingTree.infoToArray()));
     }
 }
