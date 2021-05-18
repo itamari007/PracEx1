@@ -1,3 +1,5 @@
+import javax.xml.soap.Node;
+
 /**
  * public class AVLNode
  * <p>
@@ -78,20 +80,21 @@ public class AVLTree {
         AVLNode fakeParent = insertedNode.getParent();
         fakeParent.setRight(insertedNode);
         insertedNode.setParent(fakeParent);
-        int prevHeight = fakeParent.getHeight();
-        while (fakeParent!=null){
-            //For example: if key is bigger than daddy's
-            int parentBF = fakeParent.getBalanceFactor();
-            int absBF = Math.abs(parentBF);
-            if(prevHeight == fakeParent.getHeight() && absBF < 2){
-                return 0;
+        AVLNode grampa = fakeParent.getParent();
+        int prevHeight = grampa.getHeight();
+        while (fakeParent!=root && grampa !=null){
+            //For example: if key is bigger than parent
+            int grampaBF = grampa.getBalanceFactor();
+            int absBF = Math.abs(grampaBF);
+            if(prevHeight == grampa.getHeight() && absBF < 2){
+               return 0;
             }
-            if(absBF < 2 && prevHeight != fakeParent.getHeight()){
-                prevHeight = fakeParent.getHeight();
-                fakeParent = fakeParent.getParent();
+            if(absBF < 2 && prevHeight != grampa.getHeight()){
+                prevHeight = grampa.getHeight();
+                fakeParent = grampa.getParent();
             }
             //Hard part
-            if(parentBF == -2){//Need to rotate left at lest one time.
+            if(grampaBF == -2){//Need to rotate left at lest one time.
                 if(fakeParent.getRight()!=null &&fakeParent.getRight().getLeft()!=null){
                     rotateRight(fakeParent.getRight());
                 }
@@ -120,13 +123,16 @@ public class AVLTree {
         while(!cursorNode.isLeaf()){
              cursorNode = cursorNode.getKey()>node.getKey()? cursorNode.getLeft() : cursorNode.getRight();
         }
+        //Now cursorNode points to the correct node to be set as parent of the new node.
+        AVLNode newNode = new AVLNode(node.getValue(),node.getKey());
+        newNode.setParent(cursorNode);
         if(cursorNode.getKey()<node.key){
-            cursorNode.setRight(node);
+            cursorNode.setRight(newNode);
         }
         else{
-            cursorNode.setLeft(node);
+            cursorNode.setLeft(newNode);
         }
-        return node;
+        return newNode;
     }
 
     /** as name implies, rorates to the left
@@ -403,7 +409,7 @@ public class AVLTree {
         }
         //checks if leaf
         public boolean isLeaf(){
-            return left == null && right == null;
+            return !left.isRealNode() && !right.isRealNode();
         }
 
         /**

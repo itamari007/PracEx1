@@ -1,13 +1,13 @@
 import java.util.Arrays;
 
 public class myTester {
-    private  static AVLTree testingTree = new AVLTree();
     public static void main(String[] args){
-        createAVlTestTree();
-    }
-    private static void createAVlTestTree(){
-        int n = 101;
-        for(int i = 1; i< n; i++){
+        AVLTree testingTree = new AVLTree();
+        int n = 21;
+        for(int i = 1; i< n; i+=4){
+            testingTree.insert(i,(i%4==0 || i%7 ==0 ));
+        }
+        for(int i = 20; i> 0; i-=2){
             testingTree.insert(i,(i%4==0 || i%7 ==0 ));
         }
         System.out.println("SexySuccess");
