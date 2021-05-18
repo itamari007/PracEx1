@@ -69,11 +69,12 @@ public class AVLTree {
         }
         treeSize++;
         AVLNode newNode = new AVLNode(i,k);
-        BSTInsert(newNode);
         if(root==null){
             root = newNode;
             return 0;
         }
+        int oldParentHeight = BSTInsert(newNode);
+        int newParentHeight = newNode.getParent().getHeight();
         int rotationsCounter = 0;
         /**
          * ancestorPointer will traverse all of the ancestors in the path of the new node,
@@ -81,6 +82,45 @@ public class AVLTree {
          */
         AVLNode ancestorPointer = newNode.getParent();
         while(ancestorPointer!=null){
+            int ancestorBalanceFactor = ancestorPointer.getBalanceFactor();
+            int absABF = Math.abs(ancestorBalanceFactor);
+            if(absABF < 2){
+                if(oldParentHeight == newParentHeight){
+                    return rotationsCounter;
+                }
+                else{
+                    ancestorPointer = ancestorPointer.getParent();
+                }
+            }
+            else{
+                /**
+                 * if ancestorBalanceFactor == -2, we need, at the very least, to do one leftRotation*/
+                if(ancestorBalanceFactor==-2){
+                    if(ancestorPointer.getLeft() == null){
+                        rotateLeft(ancestorPointer.getParent());
+                        rotationsCounter+=1;
+                    }
+                    else{
+                        rotateRight(ancestorPointer);
+                        rotateLeft(ancestorPointer.getParent().getParent());
+                        rotationsCounter+=2;
+                    }
+                }
+                /**
+                 * if ancestorBalanceFactor == 22, we need, at the very least, to do one rightRotation*/
+                if(ancestorBalanceFactor==2){
+                    if(ancestorPointer.getRight() == null){
+                        rotateRight(ancestorPointer.getParent());
+                        rotationsCounter+=1;
+                    }
+                    else{
+                        rotateLeft(ancestorPointer);
+                        rotateRight(ancestorPointer.getParent().getParent());
+                        rotationsCounter+=2;
+                    }
+                }
+                ancestorPointer = ancestorPointer.getParent();
+            }
 
         }
         return rotationsCounter;
@@ -89,16 +129,18 @@ public class AVLTree {
 
     /**
      * regular Binary Search Tree Insert function,
-     * traverses the tree and appends node where it is proper to do so
+     * traverses the tree and appends node where it is proper to do so, and
+     * returns the old height of the direct parent, before adding the new node.
      * @param node
      */
-    private void BSTInsert(AVLNode node){
+    private int BSTInsert(AVLNode node){
         AVLNode cursorNode = root;//Pointer that we shall use to traverse the tree
         while(cursorNode.isRealNode()){
              cursorNode = cursorNode.getKey()>node.getKey()? cursorNode.getLeft() : cursorNode.getRight();
         }
         //Now cursorNode points to the correct (fictional) node to be set as a real child
         AVLNode parent = cursorNode.getParent();
+        int OldParentHeight = parent.getHeight();
         node.setParent(parent);
         if(parent.getKey() > node.getKey()){
             parent.setLeft(node);
@@ -106,9 +148,10 @@ public class AVLTree {
         else{
             parent.setRight(node);
         }
+        return OldParentHeight;
     }
 
-    /** as name implies, rorates to the left
+    /** as name implies, rotates to the left
      * P
      *  \
      *   6
@@ -130,7 +173,7 @@ public class AVLTree {
         seven.setLeft(naughtyNode);//3
     }
 
-    /** as name implies, rorates to the right
+    /** as name implies, rotates to the right
      */
     private void rotateRight(AVLNode naughtyNode){
         AVLNode P = naughtyNode.getParent();
@@ -371,6 +414,7 @@ public class AVLTree {
         public int getHeight() {
             if(!this.isRealNode()){
                 this.setHeight(-1);
+                return height;
             }
             this.setHeight(1 + Math.max(left.getHeight(), right.getHeight()));
             return height;
