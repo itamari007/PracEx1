@@ -70,7 +70,20 @@ public class AVLTree {
         treeSize++;
         AVLNode newNode = new AVLNode(i,k);
         BSTInsert(newNode);
-        return 0;
+        if(root==null){
+            root = newNode;
+            return 0;
+        }
+        int rotationsCounter = 0;
+        /**
+         * ancestorPointer will traverse all of the ancestors in the path of the new node,
+         * until we need to fix something, or alternatively, until we reached the root and no problem was found.
+         */
+        AVLNode ancestorPointer = newNode.getParent();
+        while(ancestorPointer!=null){
+
+        }
+        return rotationsCounter;
     }
 
 
@@ -358,18 +371,9 @@ public class AVLTree {
         public int getHeight() {
             if(!this.isRealNode()){
                 this.setHeight(-1);
-                return  -1;
-            }
-            if(this.isLeaf()){
-                this.setHeight(0);
-                return 0;
             }
             this.setHeight(1 + Math.max(left.getHeight(), right.getHeight()));
             return height;
-        }
-        //checks if leaf
-        public boolean isLeaf(){
-            return !left.isRealNode() && !right.isRealNode();
         }
 
         /**
@@ -377,21 +381,7 @@ public class AVLTree {
          * @returns this node's balance factor
          */
         public int getBalanceFactor(){
-            int leftHeight;
-            int rightHeight;
-            if(left== null){
-                leftHeight = -1;
-            }
-            else{
-                leftHeight = left.getHeight();
-            }
-            if(right == null){
-                rightHeight = -1;
-            }
-            else{
-                rightHeight = right.getHeight();
-            }
-            return leftHeight - rightHeight;
+            return left.getHeight() - right.getHeight();
         }
     }
 
