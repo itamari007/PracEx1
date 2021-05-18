@@ -43,13 +43,10 @@ public class AVLTree {
     //Recursively search for life meaning(hint: it is divisible by both 14 and 3)
     private Boolean recursiveSearch(int k,AVLNode node){
         if(node==null){
-            return  Boolean.FALSE;
+            return  null;
         }
         if(node.key == k){
-            return Boolean.TRUE;
-        }
-        if(node.isLeaf()){
-            return Boolean.FALSE;
+            return node.getValue();
         }
         if(k>node.key){
             return recursiveSearch(k,node.right);
@@ -67,72 +64,35 @@ public class AVLTree {
      * returns -1 if an item with key k already exists in the tree.
      */
     public int insert(int k, boolean i) {
-        if (search(k)){
+        if (search(k)!=null){
             return -1;
         }
         treeSize++;
-        AVLNode insertedNode = new AVLNode(i,k);
-        if(root == null){
-            this.root = insertedNode;
-            return 0;
-        }
-        insertedNode = BSTInsert(insertedNode);
-        AVLNode fakeParent = insertedNode.getParent();
-        fakeParent.setRight(insertedNode);
-        insertedNode.setParent(fakeParent);
-        AVLNode grampa = fakeParent.getParent();
-        int prevHeight = grampa.getHeight();
-        while (fakeParent!=root && grampa !=null){
-            //For example: if key is bigger than parent
-            int grampaBF = grampa.getBalanceFactor();
-            int absBF = Math.abs(grampaBF);
-            if(prevHeight == grampa.getHeight() && absBF < 2){
-               return 0;
-            }
-            if(absBF < 2 && prevHeight != grampa.getHeight()){
-                prevHeight = grampa.getHeight();
-                fakeParent = grampa.getParent();
-            }
-            //Hard part
-            if(grampaBF == -2){//Need to rotate left at lest one time.
-                if(fakeParent.getRight()!=null &&fakeParent.getRight().getLeft()!=null){
-                    rotateRight(fakeParent.getRight());
-                }
-                rotateLeft(fakeParent);
-                return 1;
-            }
-            if(parentBF == 2){//Need to rotate right at least one time
-                if(fakeParent.getLeft()!=null &&fakeParent.getLeft().getRight()!=null){
-                    rotateLeft(fakeParent.getLeft());
-                }
-                rotateRight(fakeParent);
-                return 1;
-            }
-        }
+        AVLNode newNode = new AVLNode(i,k);
+        BSTInsert(newNode);
         return 0;
     }
 
 
     /**
      * regular Binary Search Tree Insert function,
-     * returns insertedNode
+     * traverses the tree and appends node where it is proper to do so
      * @param node
      */
-    private AVLNode BSTInsert(AVLNode node){
-        AVLNode cursorNode = root;
-        while(!cursorNode.isLeaf()){
+    private void BSTInsert(AVLNode node){
+        AVLNode cursorNode = root;//Pointer that we shall use to traverse the tree
+        while(cursorNode.isRealNode()){
              cursorNode = cursorNode.getKey()>node.getKey()? cursorNode.getLeft() : cursorNode.getRight();
         }
-        //Now cursorNode points to the correct node to be set as parent of the new node.
-        AVLNode newNode = new AVLNode(node.getValue(),node.getKey());
-        newNode.setParent(cursorNode);
-        if(cursorNode.getKey()<node.key){
-            cursorNode.setRight(newNode);
+        //Now cursorNode points to the correct (fictional) node to be set as a real child
+        AVLNode parent = cursorNode.getParent();
+        node.setParent(parent);
+        if(parent.getKey() > node.getKey()){
+            parent.setLeft(node);
         }
         else{
-            cursorNode.setLeft(newNode);
+            parent.setRight(node);
         }
-        return newNode;
     }
 
     /** as name implies, rorates to the left
