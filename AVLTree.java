@@ -96,13 +96,13 @@ public class AVLTree {
                 /**
                  * if ancestorBalanceFactor == -2, we need, at the very least, to do one leftRotation*/
                 if(ancestorBalanceFactor==-2){
-                    if(ancestorPointer.getLeft() == null){
-                        rotateLeft(ancestorPointer.getParent());
+                    if(!ancestorPointer.getLeft().isRealNode()){
+                        rotateLeft(ancestorPointer);
                         rotationsCounter+=1;
                     }
                     else{
                         rotateRight(ancestorPointer);
-                        rotateLeft(ancestorPointer.getParent().getParent());
+                        rotateLeft(ancestorPointer.getParent());
                         rotationsCounter+=2;
                     }
                 }
@@ -110,12 +110,12 @@ public class AVLTree {
                  * if ancestorBalanceFactor == 22, we need, at the very least, to do one rightRotation*/
                 if(ancestorBalanceFactor==2){
                     if(ancestorPointer.getRight() == null){
-                        rotateRight(ancestorPointer.getParent());
+                        rotateRight(ancestorPointer);
                         rotationsCounter+=1;
                     }
                     else{
                         rotateLeft(ancestorPointer);
-                        rotateRight(ancestorPointer.getParent().getParent());
+                        rotateRight(ancestorPointer.getParent());
                         rotationsCounter+=2;
                     }
                 }
@@ -165,17 +165,33 @@ public class AVLTree {
      *            3.for 7, change his parent from 6 to P, and add 6 as his left son
      */
     private void rotateLeft(AVLNode naughtyNode){
-        AVLNode P = naughtyNode.getParent();//1
-        AVLNode seven = naughtyNode.getRight();//1
-        P.setRight(seven);//1
-        seven.setParent(P);//3
-        naughtyNode.setParent(seven);//2
-        seven.setLeft(naughtyNode);//3
+        if(naughtyNode == root){
+            AVLNode replacer = naughtyNode.getRight();
+            replacer.setParent(null);
+            replacer.setLeft(naughtyNode);
+            root = replacer;
+            naughtyNode.setParent(replacer);
+        }
+        else{
+            AVLNode P = naughtyNode.getParent();//1
+            AVLNode seven = naughtyNode.getRight();//1
+            P.setRight(seven);//1
+            seven.setParent(P);//3
+            naughtyNode.setParent(seven);//2
+            seven.setLeft(naughtyNode);//3
+        }
     }
 
     /** as name implies, rotates to the right
      */
     private void rotateRight(AVLNode naughtyNode){
+        if(naughtyNode == root){
+            AVLNode replacer = naughtyNode.getLeft();
+            replacer.setParent(null);
+            replacer.setLeft(naughtyNode);
+            root = replacer;
+            naughtyNode.setParent(replacer);
+        }
         AVLNode P = naughtyNode.getParent();
         AVLNode seven = naughtyNode.getLeft();
         P.setLeft(seven);
@@ -427,6 +443,7 @@ public class AVLTree {
         public int getBalanceFactor(){
             return left.getHeight() - right.getHeight();
         }
+
     }
 
 }
