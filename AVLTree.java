@@ -428,11 +428,17 @@ public class AVLTree {
 
         // Returns the height of the node (-1 for virtual nodes)
         public int getHeight() {
-            if(!this.isRealNode()){
-                this.setHeight(-1);
-                return height;
+            return recursiveHeightCalculation(this);
+        }
+        private int recursiveHeightCalculation(AVLNode node){
+            if(node.isRealNode()){
+                int a = recursiveHeightCalculation(node.getLeft());
+                int b = recursiveHeightCalculation(node.getRight());
+                this.setHeight(1+Math.max(a,b));
             }
-            this.setHeight(1 + Math.max(left.getHeight(), right.getHeight()));
+            else{
+                this.setHeight(-1);
+            }
             return height;
         }
 
