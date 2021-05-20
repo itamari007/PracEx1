@@ -171,6 +171,7 @@ public class AVLTree {
             replacer.setLeft(naughtyNode);
             root = replacer;
             naughtyNode.setParent(replacer);
+            //also, needs to set naughty node right son to fictional son
         }
         else{
             AVLNode P = naughtyNode.getParent();//1
@@ -179,7 +180,18 @@ public class AVLTree {
             seven.setParent(P);//3
             naughtyNode.setParent(seven);//2
             seven.setLeft(naughtyNode);//3
+
         }
+        AVLNode fictSon = new AVLNode(null,-1);
+        setAsFictionalSon(fictSon);
+        naughtyNode.setRight(fictSon);
+    }
+
+    private void setAsFictionalSon(AVLNode fictionalSon){
+        fictionalSon.value = null;
+        fictionalSon.key = -1;
+        fictionalSon.left = null;
+        fictionalSon.right = null;
     }
 
     /** as name implies, rotates to the right
@@ -192,13 +204,17 @@ public class AVLTree {
             root = replacer;
             naughtyNode.setParent(replacer);
         }
-        AVLNode P = naughtyNode.getParent();
-        AVLNode seven = naughtyNode.getLeft();
-        P.setLeft(seven);
-        seven.setParent(P);
-        naughtyNode.setParent(seven);
-        seven.setRight(naughtyNode);
-
+        else {
+            AVLNode P = naughtyNode.getParent();
+            AVLNode seven = naughtyNode.getLeft();
+            P.setLeft(seven);
+            seven.setParent(P);
+            naughtyNode.setParent(seven);
+            seven.setRight(naughtyNode);
+        }
+        AVLNode fictSon = new AVLNode(null,-1);
+        setAsFictionalSon(fictSon);
+        naughtyNode.setRight(fictSon);
     }
 
 
@@ -421,8 +437,8 @@ public class AVLTree {
         }
 
         // sets the height of the node
-        public void setHeight(int height) {
-            this.height = height;
+        public void setHeight(int newHeight) {
+            this.height = newHeight;
         }
 
 
@@ -445,7 +461,7 @@ public class AVLTree {
             else{
                 node.setHeight(-1);
             }
-            return height;
+            return node.height;
         }
 
         /**
