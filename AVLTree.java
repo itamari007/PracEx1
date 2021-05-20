@@ -99,10 +99,13 @@ public class AVLTree {
                     if(!ancestorPointer.getLeft().isRealNode()){
                         rotateLeft(ancestorPointer);
                         rotationsCounter+=1;
+                        updateHeightForNodesInPath(ancestorPointer);
                     }
                     else{
                         rotateRight(ancestorPointer);
+                        updateHeightForNodesInPath(ancestorPointer);
                         rotateLeft(ancestorPointer.getParent());
+                        updateHeightForNodesInPath(ancestorPointer);
                         rotationsCounter+=2;
                     }
                 }
@@ -111,19 +114,30 @@ public class AVLTree {
                 if(ancestorBalanceFactor==2){
                     if(ancestorPointer.getRight() == null){
                         rotateRight(ancestorPointer);
+                        updateHeightForNodesInPath(ancestorPointer);
                         rotationsCounter+=1;
                     }
                     else{
                         rotateLeft(ancestorPointer);
+                        updateHeightForNodesInPath(ancestorPointer);
                         rotateRight(ancestorPointer.getParent());
+                        updateHeightForNodesInPath(ancestorPointer);
                         rotationsCounter+=2;
                     }
                 }
                 ancestorPointer = ancestorPointer.getParent();
+                return rotationsCounter;
             }
 
         }
         return rotationsCounter;
+    }
+
+    private void updateHeightForNodesInPath(AVLNode node){
+        while(node!=null){
+            calcHeight(node);
+            node=node.getParent();
+        }
     }
 
 
@@ -149,8 +163,7 @@ public class AVLTree {
             parent.setRight(node);
         }
         while(parent!=null) {
-            int newHeight = calcHeight(parent);
-            parent.setHeight(newHeight);
+            calcHeight(parent);
             parent = parent.getParent();
         }
         //After adding node at end of leaf
@@ -161,7 +174,9 @@ public class AVLTree {
         if(node.getKey()==-1){
             return -1;
         }
-        return 1 + Math.max(calcHeight(node.left),calcHeight(node.right));
+        int newHeight = 1 + Math.max(calcHeight(node.left),calcHeight(node.right));
+        node.setHeight(newHeight);
+        return newHeight;
     }
 
     /** as name implies, rotates to the left
@@ -194,6 +209,12 @@ public class AVLTree {
             naughtyNode.setParent(seven);//2
             seven.setLeft(naughtyNode);//3
 
+            //TODO: check if fixes rooting problem
+
+            /**if(P==null){
+             root = seven;
+             }*/
+
         }
         AVLNode fictSon = new AVLNode(null,-1);
         setAsFictionalSon(fictSon);
@@ -224,6 +245,11 @@ public class AVLTree {
             seven.setParent(P);
             naughtyNode.setParent(seven);
             seven.setRight(naughtyNode);
+            //TODO: check if fixes rooting problem
+
+            /**if(P==null){
+                root = seven;
+            }*/
         }
         AVLNode fictSon = new AVLNode(null,-1);
         setAsFictionalSon(fictSon);
