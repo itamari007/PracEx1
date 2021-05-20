@@ -417,7 +417,7 @@ public class AVLTree {
 
         // Returns True if this is a non-virtual AVL node
         public boolean isRealNode() {
-            return key != -1;
+            return key != -1 && value!=null;
         }
 
         // sets the height of the node
@@ -432,12 +432,18 @@ public class AVLTree {
         }
         private int recursiveHeightCalculation(AVLNode node){
             if(node.isRealNode()){
-                int a = recursiveHeightCalculation(node.getLeft());
-                int b = recursiveHeightCalculation(node.getRight());
-                this.setHeight(1+Math.max(a,b));
+                int a = -1;
+                int b = -1;
+                if(node.getLeft()!=null){
+                    a = recursiveHeightCalculation(node.getLeft());
+                }
+                if(node.getRight()!=null){
+                    b = recursiveHeightCalculation(node.getRight());
+                }
+                node.setHeight(1+Math.max(a,b));
             }
             else{
-                this.setHeight(-1);
+                node.setHeight(-1);
             }
             return height;
         }
@@ -447,7 +453,7 @@ public class AVLTree {
          * @returns this node's balance factor
          */
         public int getBalanceFactor(){
-            return left.getHeight() - right.getHeight();
+            return left.height - right.height;
         }
 
     }

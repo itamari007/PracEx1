@@ -7,8 +7,11 @@ public class myTester {
         for(int i = 1; i< n; i+=4){
             testingTree.insert(i,(i%4==0 || i%7 ==0 ));
         }
-        for(int i = 20; i> 0; i-=2){
+        for(int i = 20; i> 8; i-=2){
             testingTree.insert(i,(i%4==0 || i%7 ==0 ));
+            if(i==10){
+                System.out.println("afsasf");
+            }
         }
         System.out.println("SexySuccess");
         System.out.println("TreeSize: "+testingTree.size());
