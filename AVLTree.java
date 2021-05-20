@@ -102,8 +102,8 @@ public class AVLTree {
                         updateHeightForNodesInPath(ancestorPointer);
                     }
                     else{
-                        rotateRight(ancestorPointer);
-                        updateHeightForNodesInPath(ancestorPointer);
+                        rotateRight(ancestorPointer.right);
+                        updateHeightForNodesInPath(ancestorPointer.right);
                         rotateLeft(ancestorPointer.getParent());
                         updateHeightForNodesInPath(ancestorPointer);
                         rotationsCounter+=2;
@@ -118,8 +118,8 @@ public class AVLTree {
                         rotationsCounter+=1;
                     }
                     else{
-                        rotateLeft(ancestorPointer);
-                        updateHeightForNodesInPath(ancestorPointer);
+                        rotateLeft(ancestorPointer.left);
+                        updateHeightForNodesInPath(ancestorPointer.left);
                         rotateRight(ancestorPointer.getParent());
                         updateHeightForNodesInPath(ancestorPointer);
                         rotationsCounter+=2;
