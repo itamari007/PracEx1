@@ -54,6 +54,36 @@ public class AVLTree {
         return recursiveSearch(k,node.left);
     }
 
+    public AVLNode insert2(AVLNode node,int k, boolean i){
+        if (node == null){
+            return new AVLNode(i,k);
+        }
+        if (k < node.getKey()){
+            node.setLeft(insert2(node.getRight(),k,i));
+        }
+        else {
+            node.setRight(insert2(node.getLeft(), k, i));
+        }
+        node.height  = 1+Math.max(node.getLeft().getHeight(), node.getRight().getHeight());
+        int balance = node.getBalanceFactor();
+
+        if (balance>1 && k<node.getLeft().getKey()){
+            rotateRight(node);
+        }
+        if (balance<-1 && k>node.getRight().getKey()){
+            rotateLeft(node);
+        }
+        if (balance > 1 && k> node.getLeft().getKey()){
+            rotateLeft(node.getLeft());
+            rotateRight(node);
+        }
+        if (balance<-1 && k<node.getRight().getKey()){
+            rotateRight(node.getRight());
+            rotateLeft(node);
+        }
+        return node;
+    }
+
     /**
      * public int insert(int k, boolean i)
      * <p>
@@ -104,7 +134,7 @@ public class AVLTree {
                     else{
                         rotateRight(ancestorPointer.right);
                         updateHeightForNodesInPath(ancestorPointer.right);
-                        rotateLeft(ancestorPointer.getParent());
+                        rotateLeft(ancestorPointer);
                         updateHeightForNodesInPath(ancestorPointer);
                         rotationsCounter+=2;
                     }
@@ -120,7 +150,7 @@ public class AVLTree {
                     else{
                         rotateLeft(ancestorPointer.left);
                         updateHeightForNodesInPath(ancestorPointer.left);
-                        rotateRight(ancestorPointer.getParent());
+                        rotateRight(ancestorPointer);
                         updateHeightForNodesInPath(ancestorPointer);
                         rotationsCounter+=2;
                     }
@@ -176,7 +206,7 @@ public class AVLTree {
         }
         int newHeight = 1 + Math.max(calcHeight(node.left),calcHeight(node.right));
         node.setHeight(newHeight);
-        return newHeight;
+        return node.getHeight();
     }
 
     /** as name implies, rotates to the left
@@ -192,68 +222,57 @@ public class AVLTree {
      *            2.for 6, change parent from P to 7.
      *            3.for 7, change his parent from 6 to P, and add 6 as his left son
      */
-    private void rotateLeft(AVLNode naughtyNode){
-        if(naughtyNode == root){
-            AVLNode replacer = naughtyNode.getRight();
-            replacer.setParent(null);
-            replacer.setLeft(naughtyNode);
-            root = replacer;
-            naughtyNode.setParent(replacer);
-            //also, needs to set naughty node right son to fictional son
+    private void rotateLeft(AVLNode grandpa){
+        AVLNode father = grandpa.getRight();
+        AVLNode leftT = father.getLeft();
+        //Previous father of grandpa
+        AVLNode prevFather =  grandpa.getParent();
+        //Make the rotate
+        father.setLeft(grandpa);
+        grandpa.setRight(leftT);
+        grandpa.setParent(father);
+        if (leftT.getKey() != -1){
+            leftT.setParent(grandpa);
+        }        if (prevFather == null){
+            this.root = father;
+            father.setParent(null);
         }
-        else{
-            AVLNode P = naughtyNode.getParent();//1
-            AVLNode seven = naughtyNode.getRight();//1
-            P.setRight(seven);//1
-            seven.setParent(P);//3
-            naughtyNode.setParent(seven);//2
-            seven.setLeft(naughtyNode);//3
-
-            //TODO: check if fixes rooting problem
-
-            /**if(P==null){
-             root = seven;
-             }*/
-
+        if (prevFather != null){
+            father.setParent(prevFather);
+            if(prevFather.getKey()<father.getKey()){
+                prevFather.setRight(father);
+            } else {
+                prevFather.setLeft(father);
+            }
         }
-        AVLNode fictSon = new AVLNode(null,-1);
-        setAsFictionalSon(fictSon);
-        naughtyNode.setRight(fictSon);
-    }
-
-    private void setAsFictionalSon(AVLNode fictionalSon){
-        fictionalSon.value = null;
-        fictionalSon.key = -1;
-        fictionalSon.left = null;
-        fictionalSon.right = null;
     }
 
     /** as name implies, rotates to the right
      */
-    private void rotateRight(AVLNode naughtyNode){
-        if(naughtyNode == root){
-            AVLNode replacer = naughtyNode.getLeft();
-            replacer.setParent(null);
-            replacer.setLeft(naughtyNode);
-            root = replacer;
-            naughtyNode.setParent(replacer);
+    private void rotateRight(AVLNode grandpa){
+        AVLNode father = grandpa.getLeft();
+        AVLNode rightT = father.getRight();
+        //Previous father of grandpa
+        AVLNode prevFather = grandpa.getParent();
+        //Make the rotate
+        father.setRight(grandpa);
+        grandpa.setLeft(rightT);
+        if (rightT.getKey() != -1){
+            rightT.setParent(grandpa);
         }
-        else {
-            AVLNode P = naughtyNode.getParent();
-            AVLNode seven = naughtyNode.getLeft();
-            P.setLeft(seven);
-            seven.setParent(P);
-            naughtyNode.setParent(seven);
-            seven.setRight(naughtyNode);
-            //TODO: check if fixes rooting problem
+        if (prevFather== null){
+            this.root = father;
+            father.setParent(null);
+        }
+        if (prevFather != null){
+            father.setParent(prevFather);
+            if(prevFather.getKey()<father.getKey()){
+                prevFather.setRight(father);
+            } else {
+                prevFather.setLeft(father);
+            }
 
-            /**if(P==null){
-                root = seven;
-            }*/
         }
-        AVLNode fictSon = new AVLNode(null,-1);
-        setAsFictionalSon(fictSon);
-        naughtyNode.setRight(fictSon);
     }
 
 
@@ -444,7 +463,7 @@ public class AVLTree {
         //sets left child
         public void setLeft(AVLNode node) {// TODO check if beed to increase height
             left = node;
-            node.setParent(this);
+            //node.setParent(this);
         }
 
         //returns left child (if there is no left child return null)
@@ -454,8 +473,8 @@ public class AVLTree {
 
         //sets right child
         public void setRight(AVLNode node) { // TODO check if beed to increase height
-            right = node;
-            node.setParent(this);
+            this.right = node;
+            //node.setParent(this);
         }
 
         //returns right child (if there is no right child return null)
@@ -464,7 +483,7 @@ public class AVLTree {
         }
 
         //sets parent
-        public void setParent(AVLNode node) {// TODO check if beed to increase height
+        public void setParent(AVLNode node) {
             parent = node;
         }
 
