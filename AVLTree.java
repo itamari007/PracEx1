@@ -148,7 +148,20 @@ public class AVLTree {
         else{
             parent.setRight(node);
         }
+        while(parent!=null) {
+            int newHeight = calcHeight(parent);
+            parent.setHeight(newHeight);
+            parent = parent.getParent();
+        }
+        //After adding node at end of leaf
         return OldParentHeight;
+    }
+
+    private int calcHeight(AVLNode node){
+        if(node.getKey()==-1){
+            return -1;
+        }
+        return 1 + Math.max(calcHeight(node.left),calcHeight(node.right));
     }
 
     /** as name implies, rotates to the left
@@ -384,6 +397,9 @@ public class AVLTree {
                 setLeft(fictionalLeftChild);
                 setRight(fictionalRightChild);
             }
+            else{
+                this.height = -1;
+            }
         }
 
 
@@ -444,24 +460,7 @@ public class AVLTree {
 
         // Returns the height of the node (-1 for virtual nodes)
         public int getHeight() {
-            return recursiveHeightCalculation(this);
-        }
-        private int recursiveHeightCalculation(AVLNode node){
-            if(node.isRealNode()){
-                int a = -1;
-                int b = -1;
-                if(node.getLeft()!=null){
-                    a = recursiveHeightCalculation(node.getLeft());
-                }
-                if(node.getRight()!=null){
-                    b = recursiveHeightCalculation(node.getRight());
-                }
-                node.setHeight(1+Math.max(a,b));
-            }
-            else{
-                node.setHeight(-1);
-            }
-            return node.height;
+            return this.height;
         }
 
         /**
