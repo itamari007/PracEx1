@@ -54,35 +54,6 @@ public class AVLTree {
         return recursiveSearch(k,node.left);
     }
 
-    public AVLNode insert2(AVLNode node,int k, boolean i){
-        if (node == null){
-            return new AVLNode(i,k);
-        }
-        if (k < node.getKey()){
-            node.setLeft(insert2(node.getRight(),k,i));
-        }
-        else {
-            node.setRight(insert2(node.getLeft(), k, i));
-        }
-        node.height  = 1+Math.max(node.getLeft().getHeight(), node.getRight().getHeight());
-        int balance = node.getBalanceFactor();
-
-        if (balance>1 && k<node.getLeft().getKey()){
-            rotateRight(node);
-        }
-        if (balance<-1 && k>node.getRight().getKey()){
-            rotateLeft(node);
-        }
-        if (balance > 1 && k> node.getLeft().getKey()){
-            rotateLeft(node.getLeft());
-            rotateRight(node);
-        }
-        if (balance<-1 && k<node.getRight().getKey()){
-            rotateRight(node.getRight());
-            rotateLeft(node);
-        }
-        return node;
-    }
 
     /**
      * public int insert(int k, boolean i)
@@ -126,7 +97,7 @@ public class AVLTree {
                 /**
                  * if ancestorBalanceFactor == -2, we need, at the very least, to do one leftRotation*/
                 if(ancestorBalanceFactor==-2){
-                    if(!ancestorPointer.getLeft().isRealNode()){
+                    if(ancestorPointer.getRight().getBalanceFactor() == -1){
                         rotateLeft(ancestorPointer);
                         rotationsCounter+=1;
                         updateHeightForNodesInPath(ancestorPointer);
@@ -142,7 +113,7 @@ public class AVLTree {
                 /**
                  * if ancestorBalanceFactor == 22, we need, at the very least, to do one rightRotation*/
                 if(ancestorBalanceFactor==2){
-                    if(ancestorPointer.getRight() == null){
+                    if(ancestorPointer.getLeft().getBalanceFactor() != -1){
                         rotateRight(ancestorPointer);
                         updateHeightForNodesInPath(ancestorPointer);
                         rotationsCounter+=1;
@@ -260,7 +231,7 @@ public class AVLTree {
         if (rightT.getKey() != -1){
             rightT.setParent(grandpa);
         }
-        if (prevFather== null){
+        if (prevFather == null){
             this.root = father;
             father.setParent(null);
         }
