@@ -256,7 +256,15 @@ public class AVLTree {
      * returns -1 if an item with key k was not found in the tree.
      */
     public int delete(int k) {
-        return 42;    // to be replaced by student code
+        if (search(k)==null){
+            return -1;
+        }
+        AVLNode cursorNode = root;//Pointer that we shall use to traverse the tree
+        while(cursorNode.key!=k){
+            cursorNode = cursorNode.getKey()>k ? cursorNode.getLeft() : cursorNode.getRight();
+        }
+        //Now cursorNode points to the relevantn node with key == k
+        return 1240912490;
     }
 
     /**
@@ -356,6 +364,23 @@ public class AVLTree {
         return false;
     }
 
+    private AVLNode searchAndRetrieve(int key){
+        return searchAndRetrieveRec(key,root);
+    }
+
+    private AVLNode searchAndRetrieveRec(int k,AVLNode node){
+        if(node==null){
+            return  null;
+        }
+        if(node.key == k){
+            return node;
+        }
+        if(k>node.key){
+            return searchAndRetrieveRec(k,node.right);
+        }
+        return searchAndRetrieveRec(k,node.left);
+    }
+
     /**
      * public AVLNode successor
      *
@@ -365,8 +390,30 @@ public class AVLTree {
      * @return the successor of 'node' if exists, null otherwise
      */
     public AVLNode successor(AVLNode node){
-        return null;
+        int[] keys = keysToArray();
+        int n = keys.length;
+        int i = binarySearch(keys,node.key);
+        if(i == n-1){
+            return null;
+        }
+        int successorKey = keys[i+1];
+        return searchAndRetrieve(successorKey);
     }
+    private int binarySearch(int[] arr, int k){
+        int n = arr.length;
+        int i = n/2;
+        while(arr[i]!=k){
+            if(arr[i]<k){
+                i = i/2;
+            }
+            else{
+                i+=i/2;
+            }
+        }
+        return i;
+    }
+
+
 
     /**
      * public boolean succPrefixXor(int k)
