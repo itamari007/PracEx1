@@ -361,7 +361,21 @@ public class AVLTree {
      *
      */
     public boolean prefixXor(int k){
-        return false;
+        int i = 1;
+        int[] keys = keysToArray();
+        boolean[] values = infoToArray();
+        int xorNumericalValue = values[i]==Boolean.FALSE ? 0 : 1;
+        while(keys[i]<=k){
+            int xorSecondInput = boolToInt(values[i]);
+            xorNumericalValue = (1-xorNumericalValue)*xorSecondInput + xorNumericalValue*(1-xorSecondInput);
+        }
+        return intToBoolean(xorNumericalValue);
+    }
+    private Boolean intToBoolean(int i){
+        return i==0 ? Boolean.TRUE : Boolean.FALSE;
+    }
+    private int boolToInt(Boolean val){
+        return val == Boolean.FALSE ? 0 : 1;
     }
 
     private AVLNode searchAndRetrieve(int key){
@@ -427,6 +441,8 @@ public class AVLTree {
     public boolean succPrefixXor(int k){
         return false;
     }
+
+
 
 
     /**
