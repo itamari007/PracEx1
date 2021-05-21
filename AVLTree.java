@@ -364,29 +364,11 @@ public class AVLTree {
         int i = 1;
         int[] keys = keysToArray();
         boolean[] values = infoToArray();
-        int xorNumericalValue = boolToInt(values[i]);
+        boolean res = values[0];
         while(keys[i]<=k){
-            int xorSecondInput = boolToInt(values[i]);
-            xorNumericalValue = numbericalXor(xorNumericalValue,xorSecondInput);
+            res = Boolean.logicalXor(res,values[i]);
         }
-        return intToBoolean(xorNumericalValue);
-    }
-
-    private int numbericalXor(int a, int b){
-        return (1-a)*b + a*(1-b);
-    }
-
-    private boolean booleanXor(Boolean x, Boolean y){
-        int a = boolToInt(x);
-        int b = boolToInt(y);
-        return intToBoolean(numbericalXor(a,b));
-    }
-
-    private Boolean intToBoolean(int i){
-        return i==0 ? Boolean.TRUE : Boolean.FALSE;
-    }
-    private int boolToInt(Boolean val){
-        return val == Boolean.FALSE ? 0 : 1;
+        return res;
     }
 
     private AVLNode searchAndRetrieve(int key){
@@ -450,7 +432,13 @@ public class AVLTree {
      * precondition: this.search(k) != null
      */
     public boolean succPrefixXor(int k){
-        return false;
+        AVLNode traverser = searchAndRetrieve(keysToArray()[0]);
+        boolean res = traverser.value;
+        while(traverser!= null && traverser.key!=k){
+            traverser = traverser.getRight();
+            res = Boolean.logicalXor(res,traverser.value);
+        }
+        return res;
     }
 
 
