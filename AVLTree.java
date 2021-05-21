@@ -364,13 +364,24 @@ public class AVLTree {
         int i = 1;
         int[] keys = keysToArray();
         boolean[] values = infoToArray();
-        int xorNumericalValue = values[i]==Boolean.FALSE ? 0 : 1;
+        int xorNumericalValue = boolToInt(values[i]);
         while(keys[i]<=k){
             int xorSecondInput = boolToInt(values[i]);
-            xorNumericalValue = (1-xorNumericalValue)*xorSecondInput + xorNumericalValue*(1-xorSecondInput);
+            xorNumericalValue = numbericalXor(xorNumericalValue,xorSecondInput);
         }
         return intToBoolean(xorNumericalValue);
     }
+
+    private int numbericalXor(int a, int b){
+        return (1-a)*b + a*(1-b);
+    }
+
+    private boolean booleanXor(Boolean x, Boolean y){
+        int a = boolToInt(x);
+        int b = boolToInt(y);
+        return intToBoolean(numbericalXor(a,b));
+    }
+
     private Boolean intToBoolean(int i){
         return i==0 ? Boolean.TRUE : Boolean.FALSE;
     }
@@ -441,8 +452,6 @@ public class AVLTree {
     public boolean succPrefixXor(int k){
         return false;
     }
-
-
 
 
     /**
