@@ -295,16 +295,19 @@ public class AVLTree {
      */
     public int[] keysToArray() {
         int[] arr = new int[treeSize];
-        traverseInOrder(arr,0,root);
+        int[] index = new int[1];
+        index[0]=0;
+        traverseInOrder(arr,index,root);
         return arr;
     }
 
     //Traverses tree according to the regular order between Natural numbers.
-    private void traverseInOrder(int[] arr,int index, AVLNode node){
-        if(node!=null&&index<arr.length){
+    private void traverseInOrder(int[] arr,int[] index, AVLNode node){
+        if(node!=null&&index[0]<arr.length){
             traverseInOrder(arr,index,node.left);
             if(node.isRealNode()){
-                arr[index++] = node.getKey();
+                arr[index[0]] = node.getKey();
+                index[0]+=1;
             }
             traverseInOrder(arr,index,node.right);
         }
@@ -319,15 +322,18 @@ public class AVLTree {
      */
     public boolean[] infoToArray() {
         boolean[] arr = new boolean[treeSize];
-        traverseInOrderAndPopulateInfo(arr,0,root);
+        int[] index = new int[1];
+        index[0]=0;
+        traverseInOrderAndPopulateInfo(arr,index,root);
         return arr;
     }
 
-    private void traverseInOrderAndPopulateInfo(boolean[] arr,int index, AVLNode node){
-        if(node!=null&&index<arr.length){
+    private void traverseInOrderAndPopulateInfo(boolean[] arr,int[] index, AVLNode node){
+        if(node!=null&&index[0]<arr.length){
             traverseInOrderAndPopulateInfo(arr,index,node.left);
             if(node.isRealNode()){
-                arr[index++] = node.getValue();
+                arr[index[0]] = node.getValue();
+                index[0]+=1;
             }
             traverseInOrderAndPopulateInfo(arr,index,node.right);
         }
