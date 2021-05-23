@@ -1,4 +1,5 @@
 import javax.xml.soap.Node;
+import java.util.Arrays;
 
 /**
  * public class AVLNode
@@ -15,6 +16,7 @@ import javax.xml.soap.Node;
 public class AVLTree {
     private AVLNode root;
     private int treeSize;
+    private int[] keysToArray;
     /**
      * This constructor creates an empty AVLTree.
      */
@@ -228,6 +230,7 @@ public class AVLTree {
         //Make the rotate
         father.setRight(grandpa);
         grandpa.setLeft(rightT);
+        grandpa.setParent(father);
         if (rightT.getKey() != -1){
             rightT.setParent(grandpa);
         }
@@ -263,8 +266,65 @@ public class AVLTree {
         while(cursorNode.key!=k){
             cursorNode = cursorNode.getKey()>k ? cursorNode.getLeft() : cursorNode.getRight();
         }
+        int oldHeight = BSTdelete(cursorNode, root);
         //Now cursorNode points to the relevantn node with key == k
-        return 1240912490;
+        return oldHeight;
+    }
+
+    //Regular Delete in BST
+    public int BSTdelete(AVLNode node, AVLNode cursorNode){
+        boolean gotIt = false;
+        while(cursorNode.isRealNode() && !gotIt) {
+            if (cursorNode.getKey() == node.getKey()){
+            gotIt = true;
+        }
+        else{
+            cursorNode = cursorNode.getKey() > node.getKey() ? cursorNode.getLeft() : cursorNode.getRight();
+            }
+        }
+        //Now cursorNode points to the node to be deleted
+        AVLNode parent = cursorNode.getParent();
+        int OldParentHeight = parent.getHeight();
+        //Case no children to needed to be deleted node
+        if (!cursorNode.getLeft().isRealNode() && !cursorNode.getRight().isRealNode()){
+            if (parent.getRight() == cursorNode) {
+                parent.setRight(new AVLNode());
+            }
+            if (parent.getLeft() == cursorNode){
+                parent.setLeft(new AVLNode());
+            }
+            cursorNode.setParent(new AVLNode());
+            treeSize--;
+            return OldParentHeight;
+        }
+        //Case has one child - the Right child-  to needed to be deleted node
+        else if (cursorNode.getRight().isRealNode() && !cursorNode.getLeft().isRealNode()){
+            if (parent.getLeft() == cursorNode){
+                parent.setLeft(cursorNode.getRight());
+            }
+            else{
+                parent.setRight(cursorNode.getRight());
+            }
+            cursorNode.getRight().setParent(parent);
+        }
+        //Case has one child - the Ledt child-  to needed to be deleted node
+        else if (cursorNode.getLeft().isRealNode() && !cursorNode.getRight().isRealNode()){
+            if (parent.getLeft() == cursorNode){
+                parent.setLeft(cursorNode.getRight());
+            }
+            else{
+                parent.setRight(cursorNode.getRight());
+            }
+            cursorNode.getLeft().setParent(parent);
+        }
+        //Case the node has to children, we will call the successor node
+        AVLNode succsessor = successor(cursorNode);
+        AVLNode succParent = succsessor.getParent();
+        cursorNode.value = succsessor.value;
+        cursorNode.key = succsessor.key;
+        BSTdelete(succsessor, succParent);
+        //After deleting the desired node
+        return OldParentHeight;
     }
 
     /**
@@ -312,6 +372,7 @@ public class AVLTree {
             traverseInOrder(arr,index,node.right);
         }
     }
+
 
     /**
      * public boolean[] infoToArray()
@@ -416,7 +477,10 @@ public class AVLTree {
         int n = arr.length;
         int i = n/2;
         while(arr[i]!=k){
-            if(arr[i]<k){
+            if (arr[i] == k){
+                return i;
+            }
+            if(arr[i]>k){
                 i = i/2;
             }
             else{
@@ -484,7 +548,10 @@ public class AVLTree {
             }
         }
 
-
+        public AVLNode() {
+            key = -1;
+            value = null;
+        }
 
 
         //returns node's key (for virtual node return -1)
