@@ -8,10 +8,10 @@ public class myTester {
             testingTree.insert(i, true);
         }
         System.out.println(testingTree.delete(5));
-//        for(int i = 20; i> 8; i-=2){
-//            testingTree.insert(i, false);
+        for(int i = 20; i> 8; i-=2){
+            testingTree.insert(i, false);
 
-  //      }
+        }
         System.out.println("SexySuccess");
         System.out.println("TreeSize: "+testingTree.size());
         System.out.println("The Root is: "+testingTree.getRoot().getKey());

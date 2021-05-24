@@ -16,7 +16,6 @@ import java.util.Arrays;
 public class AVLTree {
     private AVLNode root;
     private int treeSize;
-    private int[] keysToArray;
     /**
      * This constructor creates an empty AVLTree.
      */
@@ -502,10 +501,14 @@ public class AVLTree {
      * precondition: this.search(k) != null
      */
     public boolean succPrefixXor(int k){
-        AVLNode traverser = searchAndRetrieve(keysToArray()[0]);
+        int[] arr = keysToArray();
+        AVLNode traverser = searchAndRetrieve(arr[0]);
+        int n = arr.length;
+        int i = 1 ;
         boolean res = traverser.value;
-        while(traverser!= null && traverser.key!=k){
-            traverser = traverser.getRight();
+        while(i<n && arr[i]<=k){
+            traverser = searchAndRetrieve(arr[i]);
+            i++;
             res = Boolean.logicalXor(res,traverser.value);
         }
         return res;
