@@ -95,8 +95,8 @@ public class AVLTree {
                 }
             }
             else{
-                /**
-                 * if ancestorBalanceFactor == -2, we need, at the very least, to do one leftRotation*/
+
+                 /// if ancestorBalanceFactor == -2, we need, at the very least, to do one leftRotation*/
                 if(ancestorBalanceFactor==-2){
                     if(ancestorPointer.getRight().getBalanceFactor() == -1){
                         rotateLeft(ancestorPointer);
@@ -306,7 +306,7 @@ public class AVLTree {
             }
             cursorNode.getRight().setParent(parent);
         }
-        //Case has one child - the Ledt child-  to needed to be deleted node
+        //Case has one child - the Left child-  to needed to be deleted node
         else if (cursorNode.getLeft().isRealNode() && !cursorNode.getRight().isRealNode()){
             if (parent.getLeft() == cursorNode){
                 parent.setLeft(cursorNode.getRight());
@@ -316,14 +316,38 @@ public class AVLTree {
             }
             cursorNode.getLeft().setParent(parent);
         }
-        //Case the node has to children, we will call the successor node
-        AVLNode succsessor = successor(cursorNode);
-        AVLNode succParent = succsessor.getParent();
-        cursorNode.value = succsessor.value;
-        cursorNode.key = succsessor.key;
-        BSTdelete(succsessor, succParent);
+        //Case the node has 2 children, we will call the successor node
+        else {
+            AVLNode succsessor = successor(cursorNode);
+            AVLNode succParent = succsessor.getParent();
+            cursorNode.value = succsessor.value;
+            cursorNode.key = succsessor.key;
+            BSTdelete(succsessor, succParent);
+        }
+        int rotations  = 0;
+        // Fun rotations part
+        while (parent != null) {
+            if (parent.getBalanceFactor() > 1 && parent.getLeft().getBalanceFactor() >= 0) {
+                rotateRight(parent);
+                rotations++;
+            } else if (parent.getBalanceFactor() > 1 && parent.getLeft().getBalanceFactor() < 0) {
+                rotateLeft(parent);
+                rotations++;
+                rotateRight(parent);
+                rotations++;
+            } else if (parent.getBalanceFactor() < -1 && parent.getRight().getBalanceFactor() <= 0) {
+                rotateLeft(parent);
+                rotations++;
+            } else if (parent.getBalanceFactor() < -1 && parent.getRight().getBalanceFactor() > 0) {
+                rotateRight(parent);
+                rotations++;
+                rotateLeft(parent);
+                rotations++;
+            }
+            parent = parent.getParent();
+        }
         //After deleting the desired node
-        return OldParentHeight;
+        return rotations;
     }
 
     /**
@@ -617,7 +641,7 @@ public class AVLTree {
 
         /**
          *
-         * @returns this node's balance factor
+         * @ret this node's balance factor
          */
         public int getBalanceFactor(){
             return left.height - right.height;

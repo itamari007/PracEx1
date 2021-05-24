@@ -7,16 +7,16 @@ public class myTester {
         for(int i = 21; i>0; i-=2){
             testingTree.insert(i, true);
         }
-        System.out.println(testingTree.delete(5));
         for(int i = 20; i> 8; i-=2){
             testingTree.insert(i, false);
 
         }
-        System.out.println("SexySuccess");
+        testingTree.delete(5);
+        System.out.println("Amos has small pines" + "*/s");
         System.out.println("TreeSize: "+testingTree.size());
         System.out.println("The Root is: "+testingTree.getRoot().getKey());
         System.out.println("The Root.getRight is: "+testingTree.getRoot().getRight().getKey());
-        System.out.println("The Root.getLeft is: "+testingTree.getRoot().getLeft().getKey());
+        //System.out.println("The Root.getLeft is: "+testingTree.getRoot().getLeft().getKey());
         //System.out.println(testingTree.);
         //System.out.println("The Root.getLeft is: "+testingTree.getRoot().getLeft().getRight().getKey());
 
