@@ -414,13 +414,14 @@ public class AVLTree {
     }
 
     private void traverseInOrderAndPopulateInfo(boolean[] arr,int[] index, AVLNode node){
-        if(node!=null&&index[0]<arr.length){
-            traverseInOrderAndPopulateInfo(arr,index,node.left);
-            if(node.isRealNode()){
-                arr[index[0]] = node.getValue();
-                index[0]+=1;
-            }
-            traverseInOrderAndPopulateInfo(arr,index,node.right);
+        if(index[0] == arr.length){return;}
+        if(node.getLeft()!=null && node.getLeft().isRealNode()==true){
+            traverseInOrderAndPopulateInfo(arr,index,node.getLeft());
+        }
+        arr[index[0]] = node.getValue();
+        index[0] = index[0] + 1;
+        if(node.getRight() != null && node.getRight().isRealNode() == true){
+            traverseInOrderAndPopulateInfo(arr,index,node.getRight());
         }
     }
 
