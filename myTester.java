@@ -33,7 +33,7 @@ public class myTester {
                 sum100 += t2-t1;
             }
             avgTimes100[i-1] = sum100 / 100;
-            System.out.println("For testingTree"+i+" the avg across all "+n*i+" natural numbers for prefixXor is: "+ avgTimes[i-1]+ " nanoseconds");
+            System.out.println("For testingTree"+i+" the avg first 100 natural numbers for prefixXor is: "+ avgTimes100[i-1]+ " nanoseconds");
         }
     }
 }

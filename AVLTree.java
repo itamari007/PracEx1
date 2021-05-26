@@ -453,15 +453,27 @@ public class AVLTree {
      *
      */
     public boolean prefixXor(int k){
-        int i = 1;
-        int[] keys = keysToArray();
-        boolean[] values = infoToArray();
-        boolean res = values[0];
-        while(i < keys.length && keys[i]<=k){
-            res = Boolean.logicalXor(res,values[i]);
-            i++;
+        AVLNode cursorNode = root;
+        Boolean res = null;
+        int i = 0;
+        while(true){
+            if(cursorNode.getKey() <= k){
+                if(res == null){
+                    res = cursorNode.getValue();
+                }
+                else{
+                    res = Boolean.logicalXor(res,cursorNode.getValue());
+                }
+                if(cursorNode.getKey() == k){
+                    break;
+                }
+                cursorNode = cursorNode.getRight();
+            }
+            else{
+                cursorNode = cursorNode.getLeft();
+            }
         }
-        return res;
+        return  res;
     }
 
     private AVLNode searchAndRetrieve(int key){
