@@ -204,9 +204,8 @@ public class AVLTree {
         father.setLeft(grandpa);
         grandpa.setRight(leftT);
         grandpa.setParent(father);
-        if (leftT.getKey() != -1){
             leftT.setParent(grandpa);
-        }        if (prevFather == null){
+            if (prevFather == null){
             this.root = father;
             father.setParent(null);
         }
@@ -231,9 +230,7 @@ public class AVLTree {
         father.setRight(grandpa);
         grandpa.setLeft(rightT);
         grandpa.setParent(father);
-        if (rightT.getKey() != -1){
-            rightT.setParent(grandpa);
-        }
+        rightT.setParent(grandpa);
         if (prevFather == null){
             this.root = father;
             father.setParent(null);
@@ -262,6 +259,7 @@ public class AVLTree {
         if (search(k)==null){
             return -1;
         }
+        treeSize--;
         AVLNode cursorNode = root;//Pointer that we shall use to traverse the tree
         while(cursorNode.key!=k){
             cursorNode = cursorNode.getKey()>k ? cursorNode.getLeft() : cursorNode.getRight();
@@ -294,7 +292,7 @@ public class AVLTree {
                 parent.setLeft(new AVLNode());
             }
             cursorNode.setParent(new AVLNode());
-            treeSize--;
+
             return OldParentHeight;
         }
         //Case has one child - the Right child-  to needed to be deleted node
