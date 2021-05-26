@@ -2,28 +2,26 @@ import java.util.Arrays;
 
 public class myTester {
     public static void main(String[] args){
-        AVLTree testingTree = new AVLTree();
-        int n = 21;
-        for(int i = 21; i>0; i-=2){
-            testingTree.insert(i, true);
+        int n = 500;
+        AVLTree[] trees = new AVLTree[5];
+        Long[] avgTimes = new Long[5];
+        for(int i= 1;i<=5;i++){
+            AVLTree testingTree = new AVLTree();
+            for(int j =0;j<=n*i;j++){
+                testingTree.insert(j,Boolean.TRUE);
+            }
+            trees[i-1] = testingTree;
         }
-        for(int i = 20; i> 8; i-=2){
-            testingTree.insert(i, false);
-
+        for(int i= 1;i<=5;i++){
+            long sum = 0;
+            for(int j =0;j<=n*i;j++){
+                long startTime = System.nanoTime();
+                trees[i-1].prefixXor(j);
+                long endTime = System.nanoTime();
+                sum+=endTime-startTime;
+            }
+            avgTimes[i-1] = sum / (n*i);
+            System.out.println("For testingTree"+i+" the avg across all "+n*i+" natural numbers for prefixXor is: "+ avgTimes[i-1]+ " nanoseconds");
         }
-        testingTree.delete(5);
-        System.out.println("Amos has small pines" + "*/s");
-        System.out.println("TreeSize: "+testingTree.size());
-        System.out.println("The Root is: "+testingTree.getRoot().getKey());
-        System.out.println("The Root.getRight is: "+testingTree.getRoot().getRight().getKey());
-        //System.out.println("The Root.getLeft is: "+testingTree.getRoot().getLeft().getKey());
-        //System.out.println(testingTree.);
-        //System.out.println("The Root.getLeft is: "+testingTree.getRoot().getLeft().getRight().getKey());
-
-        System.out.println(Arrays.toString(testingTree.keysToArray()));
-        System.out.println(Arrays.toString(testingTree.infoToArray()));
-
-        System.out.println("prefixXor: "+testingTree.prefixXor(7));
-        System.out.println("sucPrefixXor: "+testingTree.prefixXor(7));
     }
 }

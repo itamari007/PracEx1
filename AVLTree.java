@@ -457,7 +457,7 @@ public class AVLTree {
         int[] keys = keysToArray();
         boolean[] values = infoToArray();
         boolean res = values[0];
-        while(keys[i]<=k){
+        while(i < keys.length && keys[i]<=k){
             res = Boolean.logicalXor(res,values[i]);
             i++;
         }
