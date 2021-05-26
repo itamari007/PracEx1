@@ -459,6 +459,7 @@ public class AVLTree {
         boolean res = values[0];
         while(keys[i]<=k){
             res = Boolean.logicalXor(res,values[i]);
+            i++;
         }
         return res;
     }

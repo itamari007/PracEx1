@@ -22,5 +22,8 @@ public class myTester {
 
         System.out.println(Arrays.toString(testingTree.keysToArray()));
         System.out.println(Arrays.toString(testingTree.infoToArray()));
+
+        System.out.println("prefixXor: "+testingTree.prefixXor(7));
+        System.out.println("sucPrefixXor: "+testingTree.prefixXor(7));
     }
 }
