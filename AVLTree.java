@@ -1,5 +1,6 @@
 import javax.xml.soap.Node;
 import java.util.Arrays;
+import java.util.Dictionary;
 
 /**
  * public class AVLNode
@@ -378,21 +379,23 @@ public class AVLTree {
      */
     public int[] keysToArray() {
         int[] arr = new int[treeSize];
-        int[] index = new int[1];
-        index[0]=0;
-        traverseInOrder(arr,index,root);
+        int[] index = {0};
+        RecursiveKeyIndexing(arr,index,root);
         return arr;
     }
 
-    //Traverses tree according to the regular order between Natural numbers.
-    private void traverseInOrder(int[] arr,int[] index, AVLNode node){
-        if(node!=null&&index[0]<arr.length){
-            traverseInOrder(arr,index,node.left);
-            if(node.isRealNode()){
-                arr[index[0]] = node.getKey();
-                index[0]+=1;
-            }
-            traverseInOrder(arr,index,node.right);
+    /**
+     *
+     */
+    private void RecursiveKeyIndexing(int[] arr, int[] index, AVLNode cursorNode){
+        if(index[0] == arr.length){return;}
+        if(cursorNode.getLeft()!=null && cursorNode.getLeft().isRealNode()==true){
+            RecursiveKeyIndexing(arr,index,cursorNode.getLeft());
+        }
+        arr[index[0]] = cursorNode.getKey();
+        index[0] = index[0] + 1;
+        if(cursorNode.getRight() != null && cursorNode.getRight().isRealNode() == true){
+            RecursiveKeyIndexing(arr,index,cursorNode.getRight());
         }
     }
 
