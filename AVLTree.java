@@ -356,7 +356,11 @@ public class AVLTree {
      * or null if the tree is empty
      */
     public Boolean min() {
-        return infoToArray()[0];
+        AVLNode curr = root;
+        while (curr.isRealNode()){
+            curr = curr.getLeft();
+        }
+        return curr.getValue();
     }
 
     /**
@@ -366,7 +370,11 @@ public class AVLTree {
      * or null if the tree is empty
      */
     public Boolean max() {
-        return infoToArray()[size()-1];
+        AVLNode curr = root;
+        while (curr.isRealNode()){
+            curr = curr.getRight();
+        }
+        return curr.getValue();
     }
 
     /**
