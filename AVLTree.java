@@ -509,15 +509,28 @@ public class AVLTree {
      * @param node - the node whose successor should be returned
      * @return the successor of 'node' if exists, null otherwise
      */
-    public AVLNode successor(AVLNode node){
-        int[] keys = keysToArray();
-        int n = keys.length;
-        int i = binarySearch(keys,node.key);
-        if(i == n-1){
+    public AVLNode successor(AVLNode node) {
+        if (node == root) {
             return null;
         }
-        int successorKey = keys[i+1];
-        return searchAndRetrieve(successorKey);
+        if (node.getRight().isRealNode()) {
+            return minForSucc(node.getRight());
+        }
+        AVLNode parent = node.getParent();
+        while (parent.isRealNode() && node == parent.getRight()) {
+            node = parent;
+            parent = parent.getParent();
+        }
+        return parent;
+    }
+
+//using while loop to find min in the smallest node in subtree
+    private AVLNode minForSucc(AVLNode subRoot) {
+        AVLNode curr = subRoot;
+        while (curr.isRealNode()){
+            curr = curr.getLeft();
+        }
+        return curr;
     }
     private int binarySearch(int[] arr, int k){
         int n = arr.length;
