@@ -490,7 +490,7 @@ public class AVLTree {
 
     private AVLNode searchAndRetrieveRec(int k,AVLNode node){
         if(node==null){
-            return  null;
+            return null;
         }
         if(node.key == k){
             return node;
