@@ -76,7 +76,7 @@ public class Tree {
             root = newNode;
             return 0;
         }
-        return 0;
+        return BSTInsert(newNode);
     }
 
     private void updateHeightForNodesInPath(AVLNode node){

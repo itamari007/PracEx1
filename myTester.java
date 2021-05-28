@@ -16,7 +16,7 @@ public class myTester {
             }
             trees[i - 1] = testingTree;
             avgTimes[i - 1] = sum / (n * i);
-            System.out.println("For testingTree " + i + " the avg across all " + n * i + " natural numbers for insert is: " + avgTimes[i - 1] + " nanoseconds");
+            System.out.println("For AVLTree testingTree " + i + " the avg across all " + n * i + " natural numbers for insert is: " + avgTimes[i - 1] + " nanoseconds");
         }
         int k = 1000;
         Tree[] Btrees = new Tree[5];
@@ -32,7 +32,7 @@ public class myTester {
             }
             Btrees[i - 1] = testingTree;
             BavgTimes[i - 1] = sum / (k * i);
-            System.out.println("For testingTree " + i + " the avg across all " + k * i + " natural numbers for insert is: " + BavgTimes[i - 1] + " nanoseconds");
+            System.out.println("For Tree testingTree " + i + " the avg across all " + k * i + " natural numbers for insert is: " + BavgTimes[i - 1] + " nanoseconds");
         }
     }
 }
