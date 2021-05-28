@@ -1,17 +1,26 @@
 import java.util.Arrays;
+import java.util.Random;
 
 public class myTester {
     public static void main(String[] args) {
+        Random rand = new Random();
         int n = 1000;
         AVLTree[] trees = new AVLTree[5];
         Long[] avgTimes = new Long[5];
         for (int i = 1; i <= 5; i++) {
             long sum = 0;
             AVLTree testingTree = new AVLTree();
-            for (int j = 1; j <= n * i; j++) {
+            int low = 0;
+            int high = n*i;
+            int mid1 = (low+high)/2;
+            int mid2 = (low+high)/2;
+            while (mid1 > 0 && mid2<=n*i){
                 long startTime = System.nanoTime();
-                testingTree.insert(j, Boolean.TRUE);
+                testingTree.insert(mid1, Boolean.TRUE);
+                testingTree.insert(mid2, Boolean.TRUE);
                 long endTime = System.nanoTime();
+                mid1 = (mid1+low)/2;
+                mid2 = (mid2+high)/2;
                 sum += (endTime - startTime);
             }
             trees[i - 1] = testingTree;
@@ -24,10 +33,17 @@ public class myTester {
         for (int i = 1; i <= 5; i++) {
             long sum = 0;
             Tree testingTree = new Tree();
-            for (int j = 1; j <= k * i; j++) {
+            int low = 0;
+            int high = n*i;
+            int mid1 = (low+high)/2;
+            int mid2 = (low+high)/2+1;
+            while (mid1 > 0 && mid2<=n*i){
                 long startTime = System.nanoTime();
-                testingTree.insert(j, Boolean.TRUE);
+                testingTree.insert(mid1, Boolean.TRUE);
+                testingTree.insert(mid2, Boolean.TRUE);
                 long endTime = System.nanoTime();
+                mid1 = (mid1+low)/2;
+                mid2 = (mid2+high)/2;
                 sum += (endTime - startTime);
             }
             Btrees[i - 1] = testingTree;
