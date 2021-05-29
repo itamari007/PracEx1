@@ -461,27 +461,20 @@ public class AVLTree {
      *
      */
     public boolean prefixXor(int k){
-        AVLNode cursorNode = root;
-        Boolean res = null;
-        int i = 0;
-        while(true){
-            if(cursorNode.getKey() <= k){
-                if(res == null){
-                    res = cursorNode.getValue();
-                }
-                else{
-                    res = Boolean.logicalXor(res,cursorNode.getValue());
-                }
-                if(cursorNode.getKey() == k){
-                    break;
-                }
-                cursorNode = cursorNode.getRight();
-            }
-            else{
-                cursorNode = cursorNode.getLeft();
+        return  prefixXorRec(k,root);
+    }
+    private boolean prefixXorRec(int k,AVLNode node){
+        boolean res = search(k);
+        if(node.getKey()<k){
+            res = Boolean.logicalXor(node.getValue(),res);
+            if(node.getRight()!=null && node.getRight().isRealNode()){
+                res = Boolean.logicalXor(res,prefixXorRec(k,node.getRight()));
             }
         }
-        return  res;
+        if(node.getLeft()!=null && node.getLeft().isRealNode()){
+            res = Boolean.logicalXor(res,prefixXorRec(k,node.getLeft()));
+        }
+        return res;
     }
 
     private AVLNode searchAndRetrieve(int key){
@@ -524,13 +517,13 @@ public class AVLTree {
         return parent;
     }
 
-//using while loop to find min in the smallest node in subtree
+//using while loop to find min for the smallest node in subtree
     private AVLNode minForSucc(AVLNode subRoot) {
         AVLNode curr = subRoot;
         while (curr.isRealNode()){
             curr = curr.getLeft();
         }
-        return curr;
+        return curr.getParent();
     }
     private int binarySearch(int[] arr, int k){
         int n = arr.length;
@@ -561,15 +554,14 @@ public class AVLTree {
      * precondition: this.search(k) != null
      */
     public boolean succPrefixXor(int k){
-        int[] arr = keysToArray();
-        AVLNode traverser = searchAndRetrieve(arr[0]);
-        int n = arr.length;
-        int i = 1 ;
-        boolean res = traverser.value;
-        while(i<n && arr[i]<=k){
-            traverser = searchAndRetrieve(arr[i]);
-            i++;
-            res = Boolean.logicalXor(res,traverser.value);
+        AVLNode currsernode = minForSucc(root);
+        boolean res = currsernode.getValue();
+        while (currsernode.getKey() <= k){
+            currsernode = successor(currsernode);
+            if (currsernode == null){
+                break;
+            }
+            res = Boolean.logicalXor(res, currsernode.getValue());
         }
         return res;
     }

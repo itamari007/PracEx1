@@ -1,37 +1,42 @@
 import java.util.Arrays;
 import java.util.Random;
 
+import java.util.Arrays;
+
 public class myTester {
-    public static void main(String[] args) {
-        Random rand = new Random();
-        int n = 1024;
-        long[] avlAVG = new long[5];
-        long[] binAVG = new long[5];
-        for (int i = 1; i <= 5; i++) {
-            AVLTree balancedTree = new AVLTree();
-            Tree bBinTree = new Tree();
-            int N = n * i;
-            long sumAVL = 0;
-            long sumBIN = 0;
-            while (N > 0) {
-                N = N / 2;
-                int x = 0;
-                while (N != 0 && x + N <= n * i) {
-                    x += N;
-                    long startTime = System.nanoTime();
-                    balancedTree.insert(x, Boolean.TRUE);
-                    long endTime = System.nanoTime();
-                    sumAVL += endTime - startTime;
-                    startTime = System.nanoTime();
-                    bBinTree.insert(x, Boolean.TRUE);
-                    endTime = System.nanoTime();
-                    sumBIN += endTime - startTime;
-                }
+    public static void main(String[] args){
+        int n = 500;
+        AVLTree[] trees = new AVLTree[5];
+        Long[] avgTimes = new Long[5];
+        Long[] avgTimes100 = new Long[5];
+        for(int i= 1;i<=5;i++){
+            AVLTree testingTree = new AVLTree();
+            for(int j =1;j<=n*i;j++){
+                testingTree.insert(j,Boolean.TRUE);
             }
-            avlAVG[i - 1] = sumAVL / (n * i);
-            binAVG[i - 1] = sumBIN / (n * i);
-            System.out.println("for AVL tree #" + i  + ", the avg insert time was: " + avlAVG[i - 1]);
-            System.out.println("meanwhile, forthe corresponding regular binary tree with size " + ", the avg insert time was: " + binAVG[i - 1]);
+            trees[i-1] = testingTree;
+        }
+        for(int i= 1;i<=5;i++){
+            long sum = 0;
+            for(int j =1;j<=n*i;j++){
+                long startTime = System.nanoTime();
+                trees[i-1].succPrefixXor(j);
+                long endTime = System.nanoTime();
+                sum+=endTime-startTime;
+            }
+            avgTimes[i-1] = sum / (n*i);
+            System.out.println("For testingTree"+i+" the avg across all "+n*i+" natural numbers for prefixXor is: "+ avgTimes[i-1]+ " nanoseconds");
+        }
+        for(int i=1;i<=5;i++){
+            long sum100 = 0;
+            for(int j=1;j<=100;j++){
+                long t1 = System.nanoTime();
+                trees[i-1].succPrefixXor(j);
+                long t2 = System.nanoTime();
+                sum100 += t2-t1;
+            }
+            avgTimes100[i-1] = sum100 / 100;
+            System.out.println("For testingTree"+i+" the avg across all "+n*i+" natural numbers for prefixXor is: "+ avgTimes100[i-1]+ " nanoseconds");
         }
     }
 }
