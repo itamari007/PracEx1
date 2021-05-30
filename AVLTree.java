@@ -133,6 +133,7 @@ public class AVLTree {
             }
 
         }
+        calculateSubTreePrefix(newNode);
         return rotationsCounter;
     }
 
@@ -265,6 +266,7 @@ public class AVLTree {
             cursorNode = cursorNode.getKey()>k ? cursorNode.getLeft() : cursorNode.getRight();
         }
         int oldHeight = BSTdelete(cursorNode, root);
+        calculateSubTreePrefix(cursorNode);
         //Now cursorNode points to the relevantn node with key == k
         return oldHeight;
     }
@@ -461,7 +463,21 @@ public class AVLTree {
      *
      */
     public boolean prefixXor(int k){
-        return  prefixXorRec(k,root);
+        //return  prefixXorRec(k,root);
+        AVLNode node = searchAndRetrieve(k);
+        boolean res = node.getValue();
+        if(node.getLeft()!=null && node.getLeft().isRealNode()){
+            res = Boolean.logicalXor(res,node.getLeft().getPrefix());
+        }
+        AVLNode cursorNode = root;
+        while (cursorNode!=null && cursorNode.isRealNode() &&  cursorNode.getKey()<k){
+            res = Boolean.logicalXor(res,cursorNode.getValue());
+            if(cursorNode.getLeft()!=null && cursorNode.getLeft().isRealNode()){
+                res = Boolean.logicalXor(res,node.getLeft().getPrefix());
+            }
+            cursorNode = cursorNode.getRight();
+        }
+        return res;
     }
     private boolean prefixXorRec(int k,AVLNode node){
         boolean res = search(k);
@@ -503,14 +519,11 @@ public class AVLTree {
      * @return the successor of 'node' if exists, null otherwise
      */
     public AVLNode successor(AVLNode node) {
-        if (node == root) {
-            return null;
-        }
         if (node.getRight().isRealNode()) {
             return minForSucc(node.getRight());
         }
         AVLNode parent = node.getParent();
-        while (parent.isRealNode() && node == parent.getRight()) {
+        while (parent!=null && parent.isRealNode() && node == parent.getRight()) {
             node = parent;
             parent = parent.getParent();
         }
@@ -540,6 +553,29 @@ public class AVLTree {
             }
         }
         return i;
+    }
+
+    public void calculateSubTreePrefix(AVLNode subroot){
+        if(subroot.isRealNode()){
+            boolean cond1 = subroot.getRight()!=null && subroot.getRight().isRealNode();
+            boolean cond2 = subroot.getLeft()!=null && subroot.getLeft().isRealNode();
+            if(cond1 && !cond2){
+                calculateSubTreePrefix(subroot.getRight());
+                subroot.setPrefix(Boolean.logicalXor(subroot.getValue(),subroot.getRight().getPrefix()));
+            }
+            if(cond2 && !cond1){
+                calculateSubTreePrefix(subroot.getLeft());
+                subroot.setPrefix(Boolean.logicalXor(subroot.getValue(),subroot.getLeft().getPrefix()));
+            }
+            if(cond1 && cond2){
+                calculateSubTreePrefix(subroot.getRight());
+                calculateSubTreePrefix(subroot.getLeft());
+                subroot.setPrefix(Boolean.logicalXor(Boolean.logicalXor(subroot.getValue(),subroot.getLeft().getPrefix()),subroot.getRight().getPrefix()));
+            }
+            if(!cond1 && !cond2){
+                subroot.setPrefix(subroot.getValue());
+            }
+        }
     }
 
 
@@ -585,6 +621,7 @@ public class AVLTree {
         private AVLNode right = null;
         private AVLNode parent = null;
         private int height;
+        private boolean prefix;
 
         public AVLNode(Boolean value, int key) {
             this.value = value;
@@ -606,6 +643,15 @@ public class AVLTree {
             key = -1;
             value = null;
         }
+
+        public boolean getPrefix(){
+            return prefix;
+        }
+
+        public void setPrefix(boolean newprix){
+            prefix = newprix;
+        }
+
 
 
         //returns node's key (for virtual node return -1)

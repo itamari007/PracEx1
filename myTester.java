@@ -20,7 +20,7 @@ public class myTester {
             long sum = 0;
             for(int j =1;j<=n*i;j++){
                 long startTime = System.nanoTime();
-                trees[i-1].succPrefixXor(j);
+                trees[i-1].prefixXor(j);
                 long endTime = System.nanoTime();
                 sum+=endTime-startTime;
             }
@@ -31,7 +31,7 @@ public class myTester {
             long sum100 = 0;
             for(int j=1;j<=100;j++){
                 long t1 = System.nanoTime();
-                trees[i-1].succPrefixXor(j);
+                trees[i-1].prefixXor(j);
                 long t2 = System.nanoTime();
                 sum100 += t2-t1;
             }
